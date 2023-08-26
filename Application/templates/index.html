@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Thermal CAPTCHA</title>
+	<link rel="stylesheet" type="text/css" href="../static/index.css">
+	<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../static/index.js"></script>
+</head>
+<body>
+
+
+
+<div class='App'>
+    <header class='App-header'>
+        <p><u>
+          Thermal CAPTCHA YOLOV4(darknet)
+        </u></p>
+        <div className="pre_img">
+          <span><img id="imagebox" src=""></span>
+        </div>
+        <!-- modify it accoding to your localhost-->
+        <form action = "http://localhost:5000/shell" method = "POST">
+          <p><input type = "submit" value = "Click to pass the CAPTCHA" /></p>
+       </form>
+       <!-- modify it accoding to your localhost -->
+	</header>
+</div>
+
+</body>
+</html>

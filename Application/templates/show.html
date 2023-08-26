@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Thermal CAPTCHA result</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="30" />
+<style>
+body {background-color:#000000;background-repeat:no-repeat;background-position:top left;background-attachment:fixed;}
+h1{text-align:center;font-family:Arial, sans-serif;color:#ffffff;background-color:#000000;}
+p {text-align:center;font-family:Georgia, serif;font-size:48px;font-style:normal;font-weight:normal;color:#ffffff;background-color:#000000;}
+</style>
+</head>
+<body>
+<h1>Thermal CAPTCHA's result</h1>
+<p>This will refresh in 30 seconds!</p>
+<p><img src="{{url_for('static', filename='/Image/detection.jpg')}}"></p>
+<p>Label: {{label}} </p>
+<p>Confidence: {{conf}} </p>
+</body>
+</html>
