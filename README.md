@@ -2,7 +2,7 @@ The application directory is the implementation part of our "Live-Thermal-Image-
 
 Running instruction:
 1. Clone the repository.
-2. Go to the project directory.
+2. Go to the "Application" directory.
 3. Create a virtual environment.
 4. Activate the environment.
 5. Execute: "pip install -r requirements.txt"
