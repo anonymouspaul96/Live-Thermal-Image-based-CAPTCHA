@@ -9,3 +9,4 @@ Running instruction:
 6. Download the weight file from "https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing" and place it under the Application directory.
 7. In the command line, execute: "flask run"
 
+Note: If you can't detect the thermal webcam. Try changing the "camlist[*]" value in the app.py file. Usually, it will be between (0-10).
