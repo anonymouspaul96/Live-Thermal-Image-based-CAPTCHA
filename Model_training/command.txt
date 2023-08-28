@@ -1,0 +1,25 @@
+./darknet detector test training/model_person_class/model_person.data training/model_person_class/yolov3-tiny-model-person.cfg backup/yolov3-tiny-model-person_10000.weights data/Thermal/20.bmp 
+
+
+
+./darknet detector test training/model_person_class/model_person.data training/model_person_class/yolov3-tiny-model-person.cfg backup/yolov3-tiny-model-person_10000.weights data/Thermal/16.bmp 
+
+
+
+./darknet detector demo training/model_person_class/model_person.data training/model_person_class/yolov3-tiny-model-person.cfg backup/yolov3-tiny-model-person_10000.weights -c 2
+
+
+./darknet detector demo training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg backup/yolov4-tiny-model-person_30000.weights -c 2
+
+./darknet detector demo training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg backup/yolov4-tiny-model-person_30000.weights -dont_show -thresh .99 -c 2
+
+
+training command:
+
+make
+
+make clean
+
+./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.weights map
+
+

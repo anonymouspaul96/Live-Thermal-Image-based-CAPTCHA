@@ -1,0 +1,5 @@
+classes = 1
+train  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/train.txt
+valid  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/test.txt
+names  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/model_person.names
+backup = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/backup/

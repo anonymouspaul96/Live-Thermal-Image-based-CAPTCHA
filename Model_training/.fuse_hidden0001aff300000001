@@ -1,0 +1,8 @@
+#! /bin/sh
+
+
+#echo "hi from shell script"
+#echo "hello from shell script"
+./darknet detector demo training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg backup/yolov4-tiny-model-person_30000.weights -c 
+
+#./darknet detector demo training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg backup/yolov4-tiny-model-person_30000.weights -c 2
