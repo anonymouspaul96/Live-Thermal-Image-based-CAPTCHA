@@ -1,6 +1,6 @@
 The application directory is the implementation part of our "Live-Thermal-Image-based-CAPTCHA."
 
-Running instruction:
+(Live-Thermal-Image-based-CAPTCHA) running instruction:
 1. Clone the repository.
 2. Go to the "Application" directory.
 3. Create a virtual environment.
@@ -9,4 +9,4 @@ Running instruction:
 6. Download the weight file from "https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing" and place it under the "Application" directory.
 7. In the command line, execute: "flask run"
 
-Note: If you can't detect the thermal webcam. Try changing the "camlist[*]" value in the app.py file. Usually, value will be between (0-10).
+Note: If you can't detect the thermal webcam. Try changing the "camlist[*]" value in the app.py file. Usually, the value will be between (0-10).
