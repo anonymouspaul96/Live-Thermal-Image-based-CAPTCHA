@@ -13,4 +13,4 @@ Note: Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only ha
 
 The following instructions are for creating your custom weight for your model:
 
-1. Follow the "https://techzizou.com/yolo-installation-on-windows-and-linux/#install_linux" instruction to create YOLOv4-darknet installation and usage on your system. 
+1. Follow the "https://techzizou.com/yolo-installation-on-windows-and-linux/#install_linux" instruction to create YOLOv4-darknet installation and usage on your system.
