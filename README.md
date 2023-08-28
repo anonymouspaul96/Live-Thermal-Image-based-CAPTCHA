@@ -10,3 +10,7 @@ The application directory is the implementation part of our "Live-Thermal-Image-
 7. In the command line, execute: "flask run"
 
 Note: Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "Application" directory and follow the running instructions. If you can't detect the thermal webcam. Try changing the "camlist[*]" value in the "app.py" file. Usually, the value will be between (0-10).
+
+The following instructions are for creating your custom weight for your model:
+
+1. Follow the "https://techzizou.com/yolo-installation-on-windows-and-linux/#install_linux" instruction to create YOLOv4-darknet installation and usage on your system. 
