@@ -3,13 +3,13 @@ The application directory is the implementation part of our "Live-Thermal-Image-
 
 (Live-Thermal-Image-based-CAPTCHA) running instruction:
 1. Clone the repository ```git clone https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA.git```
-2. In the terminal, Go to the "Application" directory
+2. In the terminal
    ```
    cd Live-Thermal-Image-based-CAPTCHA
    cd Application
    ```
-5. Create a virtual environment.
-6. Activate the environment.
+5. Create a virtual environment ```python3 -m venv venv```
+6. Activate the environment ```source venv/bin/activate```
 7. Execute: ```pip install -r requirements.txt```
 8. Download the [weight](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) file and place it under the "Application" directory.
 9. In the command line, execute: ```flask run```
