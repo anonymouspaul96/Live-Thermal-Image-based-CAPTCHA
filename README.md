@@ -1,4 +1,4 @@
-The application directory is the implementation part of our "Live-Thermal-Image-based-CAPTCHA."
+## The application directory is the implementation part of our "Live-Thermal-Image-based-CAPTCHA."
 
 (Live-Thermal-Image-based-CAPTCHA) running instruction:
 1. Clone the repository.
