@@ -5,7 +5,7 @@ The application directory is the implementation part of our "Live-Thermal-Image-
 2. Go to the "Application" directory.
 3. Create a virtual environment.
 4. Activate the environment.
-5. Execute: "pip install -r requirements.txt"
+5. Execute: ```pip install -r requirements.txt```
 6. Download the weight file from "https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing" and place it under the "Application" directory.
 7. In the command line, execute: "flask run"
 
