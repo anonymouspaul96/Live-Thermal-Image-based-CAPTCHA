@@ -28,8 +28,8 @@ The application directory is the implementation part of our "**Live-Thermal-Imag
 >[!IMPORTANT]
 >Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "***Application***" directory and follow the running instructions. If there is no error and the application still can't detect the thermal webcam, then try changing the "_camlist[*]_" value in the "***app.py***" file. ***Usually, the value will be between (0-10)***.
 
->[!ALERT]
->sdad
+--[!Alert] 
+This is 
 
 >[!NOTE]
 >If you face any problems to run the application, please email "***ap.anonymouspaul@gmail.com***"
