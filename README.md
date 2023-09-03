@@ -3,9 +3,9 @@ CAPTCHAs serve as a protective measure to differentiate between humans and bots,
 
 
 ## How can I run "Live-Thermal-Image-based-CAPTCHA" in any PC?
-The application directory is the implementation part of our "Live-Thermal-Image-based-CAPTCHA."
+The application directory is the implementation part of our "**Live-Thermal-Image-based-CAPTCHA**."
 
-(Live-Thermal-Image-based-CAPTCHA) running instruction:
+(**Live-Thermal-Image-based-CAPTCHA**) running instruction:
 1. Clone the repository ```git clone https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA.git```
 2. In the terminal
    ```
@@ -15,10 +15,12 @@ The application directory is the implementation part of our "Live-Thermal-Image-
 5. Create a virtual environment ```python3 -m venv venv```
 6. Activate the environment ```source venv/bin/activate```
 7. Execute: ```pip install -r requirements.txt```
-8. Download the [weight](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) file and place it under the "Application" directory.
+8. Download the [weight](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) file and place it under the "***Application***" directory.
 9. In the command line, execute: ```flask run```
-10. ![homepage](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/fcb842e6-e8a3-45e5-a585-eb5b301e7357)
-11. ![afterVerification](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/ea2b134f-f13d-43a7-9a5d-b551a0f65211)
+10. Click the ```Click to pass the CAPTCHA``` button.
+    ![homepage](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/fcb842e6-e8a3-45e5-a585-eb5b301e7357)
+12. The result of "**Live-Thermal-Image-based-CAPTCHA**" after a person is detected.
+    ![afterVerification](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/ea2b134f-f13d-43a7-9a5d-b551a0f65211)
 
 
 >[!NOTE]
