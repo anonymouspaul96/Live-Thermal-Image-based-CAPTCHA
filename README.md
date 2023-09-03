@@ -7,7 +7,7 @@ CAPTCHAs serve as a protective measure to differentiate between humans and bots,
 ### Supported Environments
 For tasks specific to web browsers, such as submitting a thermal image and receiving outcomes from the server’s object detector, we utilized Flask—a lightweight web framework developed in Python. Our image classifier network, _YOLOv4-tiny_, was implemented on top of Darknet—an open-source neural network framework coded in C and CUDA. This framework not only offers rapid and uncomplicated setup but also supports both CPU and GPU computations. We carried out our experiments in the environment of _Ubuntu 20.04_. To simulate a server with lower power consumption, the host machine—where the object detector operated—featured an I_ntel Core i5-8550U (1.80 GHz) processor_, _8 GB of RAM_, and an _NVIDIA Geforce MX150 GPU_. The "***Application***" directory is the implementation part of our "**Live-Thermal-Image-based-CAPTCHA**."
 
-### (**Live-Thermal-Image-based-CAPTCHA**) running instruction:
+### [(**Live-Thermal-Image-based-CAPTCHA**) running instruction](#instruction):
 1. Clone the repository ```git clone https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA.git```
 2. In the terminal
    ```
@@ -28,7 +28,7 @@ For tasks specific to web browsers, such as submitting a thermal image and recei
 >If you get an error like ``` ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()] IndexError: invalid index to scalar variable.``` Then please remove the bracket with 0: ```ln = [ln[i - 1] for i in net.getUnconnectedOutLayers()]```, line 50 in yolo_detection_images.py file.
 
 >[!IMPORTANT]
->Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "***Application***" directory and follow the running instructions. If there is no error and the application still can't detect the thermal webcam, then try changing the "***camlist[\*]***" value in the "***app.py***" file. ***Usually, the value will be between (0-10)***.
+>Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "***Application***" directory and follow the running [instructions](instruction). If there is no error and the application still can't detect the thermal webcam, then try changing the "***camlist[\*]***" value in the "***app.py***" file. ***Usually, the value will be between (0-10)***.
 
 >[!NOTE]
 >If you face any problems to run the application, please email "***ap.anonymouspaul@gmail.com***"
