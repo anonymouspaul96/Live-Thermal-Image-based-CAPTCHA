@@ -22,12 +22,14 @@ The application directory is the implementation part of our "**Live-Thermal-Imag
 12. The result of "**Live-Thermal-Image-based-CAPTCHA**" after a person is detected.
     ![afterVerification](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/ea2b134f-f13d-43a7-9a5d-b551a0f65211)
 
-
->[!NOTE]
->Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "Application" directory and follow the running instructions. If you can't detect the thermal webcam. Try changing the "camlist[*]" value in the "app.py" file. Usually, the value will be between (0-10).
-
 >[!WARNING]
 >If you get an error like ``` ln = [ln[i[0] - 1] for i in net.getUnconnectedOutLayers()] IndexError: invalid index to scalar variable.``` Then please remove the bracket with 0: ```ln = [ln[i - 1] for i in net.getUnconnectedOutLayers()]```, line 50 in yolo_detection_images.py file.
+
+>[!IMPORTANT]
+>Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the "***Application***" directory and follow the running instructions. If there is no error and the application still can't detect the thermal webcam, then try changing the "camlist[*]" value in the "app.py" file. Usually, the value will be between (0-10).
+
+>[!NOTE]
+>If you face any problems to run the application, please email "***ap.anonymouspaul@gmail.com***"
 
 The following instructions are for creating your custom weight for your model:
 
