@@ -33,13 +33,13 @@ For tasks specific to web browsers, such as submitting a thermal image and recei
 >[!NOTE]
 >If you face any problems to run the application, please email "***ap.anonymouspaul@gmail.com***"
 
-## How can I generate my own weight with a custom dataset?
+## How can I generate my own weight with a thermal dataset?
 
 The following instructions are for creating your custom weight:
 
-1. Follow the [instruction](https://techzizou.com/yolo-installation-on-windows-and-linux/#install_linux) to create YOLOv4-darknet installation and usage on your system.(_For both windows and linux installation steps are mentioned in the blog._)
+1. Follow the [instruction](https://techzizou.com/yolo-installation-on-windows-and-linux/#install_linux) to create YOLOv4-darknet installation and usage on your system.(_For both Windows and Linux installation steps are mentioned in the blog._)
 2. Clone the repository ```git clone https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA.git```.
 3. Go to the "***Model_training***" directory ```cd Model_training```.
-4. Download the [dataset](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing) folder and place it under the "***training***" directory.
+4. Download the [dataset](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing) folder and place it under the "***training***" directory. (_Make sure the folder name is "dataset". If downloaded with a different name, rename the folder name to "dataset" and copy it._)
 5. Inside the "***Model_training***" directory, make a folder name "***weights***".
 6. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
