@@ -42,4 +42,4 @@ The following instructions are for creating your custom weight:
 3. Go to the "Model_training" directory ```cd Model_training```.
 4. Download the [dataset](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing) folder and place it under the "training" directory.
 5. Inside the "Model_training" directory, make a folder name "weights".
-6. Download the [weight](yolov4-tiny.weights" from "https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "weight" folder.
+6. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "weight" folder.
