@@ -59,7 +59,7 @@ The following instructions are for creating your custom weight:
    names  = /[your path]/training/model_person_class/model_person.names
    backup = /[your path]/backup/
    ```
-8. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder, also open the "***train.txt***" and "***test.txt***" files and make sure it's pointing to the right path in the dataset folder.
+7. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder, also open the "***train.txt***" and "***test.txt***" files and make sure it's pointing to the right path in the dataset folder.
    for me:
    ```
    /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/6_x_90.jpg
@@ -74,12 +74,12 @@ The following instructions are for creating your custom weight:
    /[your path]/training/dataset/6_y_80.jpg
    /[your path]/training/dataset/7_x_100.jpg
    ```
-10. The entries in the "***train.txt***" and "***test.txt***" file also depends on the percentage of data you want for training and testing purpose. (***You can change the ratio***)
-11. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file. If you want to change the hyperparameters, please follow AlexeyAB [how to train 
+8. The entries in the "***train.txt***" and "***test.txt***" file also depends on the percentage of data you want for training and testing purpose. (***You can change the ratio***)
+9. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file. If you want to change the hyperparameters, please follow AlexeyAB [how to train 
  tiny yolo to detect your custom objects](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/edit/main/Model_training/#how-to-train-tiny-yolo-to-detect-your-custom-objects). (_With current configuration we found the best result._)
-12. Inside the "***Model_training***" directory, make a folder name "***weights***".
-13. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
-14. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
+10. Inside the "***Model_training***" directory, make a folder name "***weights***".
+11. Download the [weight]([https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing](https://drive.google.com/file/d/1FGwnI2d9w10vri4e7R-V79b-dC4XJBhx/view?usp=sharing) and place it under the "***weight***" folder.
+12. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
 
     For running on GPU:
     ```
@@ -112,11 +112,13 @@ The following instructions are for creating your custom weight:
     USE_CPP=0
     DEBUG=0
     ```
-16. asd
-17. 
+13. In the terminal, execute ```make```
+14. In the terminal execute  ``` ./darknet detector train <path_to_your_.data_file> <path_to_your_.cfg_file> <path_to_your_pre-trained_weight> map```
 
-1
-
+    For me, the execution command was:
+   ```./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.weights map```
+15. Each time you change anything in the ***step[5-12]***, execute ```make clean``` in the terminal and re-execute the command mentioned in ***step[13,14]***.
+16. a 
 
 
 
