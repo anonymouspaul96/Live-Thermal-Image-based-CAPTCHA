@@ -119,10 +119,16 @@ The following instructions are for creating your custom weight:
    ```./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.conv.29 map```
 15. Each time you change anything in the ***step[5-12]***, execute ```make clean``` in the terminal and re-execute the command mentioned in ***step[13,14]***.
 16. After training, all the weights will be available in the ***backup*** ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder.
-17. We trained the model for 40,000 epochs, resulting in an average loss of 0.0509. This score falls within the range of 0.5 to 0.03, as indicated in the [YOLO documentation](https://github.com/AlexeyAB/darknet#how-to-train-to-detect-your-custom-objects) for an exemplary detector model. 
-![chart](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/a7620f85-82cc-4d8b-b9c3-6e5fd5c402b6)
+
+>[!IMPORTANT]
+>We trained the model for 40,000 epochs, resulting in an average loss of 0.0509. This score falls within the range of 0.5 to 0.03, as indicated in the [YOLO documentation](https://github.com/AlexeyAB/darknet#how-to-train-to-detect-your-custom-objects) for an exemplary detector model.
+>![chart](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/a7620f85-82cc-4d8b-b9c3-6e5fd5c402b6)
 
 ## Generated weights comparison after every 10,000 iterations
+You can check mAP for all the weights saved every 1000 iterations, for e.g.:- yolov4-custom_4000.weights, yolov4-custom_5000.weights, yolov4-custom_6000.weights, and so on. This lets you find out which weights file gives you the best result. The higher the mAP, the better it is. Run the following command to check the mAP for a particular saved weights file where xxxx is the iteration number for it.(eg:- 4000,5000,6000,…)
+```
+!./darknet detector map data/obj.data cfg/yolov4-custom.cfg /mydrive/yolov4/training/yolov4-custom_xxxx.weights -points 0
+```
 
 
 
