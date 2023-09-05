@@ -79,3 +79,43 @@ The following instructions are for creating your custom weight:
  tiny yolo to detect your custom objects](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/edit/main/Model_training/#how-to-train-tiny-yolo-to-detect-your-custom-objects). (_With current configuration we found the best result._)
 12. Inside the "***Model_training***" directory, make a folder name "***weights***".
 13. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
+14. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
+   For GPU:
+    ```
+    GPU=1
+    CUDNN=1
+    CUDNN_HALF=1
+    OPENCV=1
+    AVX=1
+    OPENMP=1
+    LIBSO=1
+    ZED_CAMERA=0
+    ZED_CAMERA_v2_8=0
+    USE_CPP=0
+    DEBUG=0
+
+    ```
+    Also, change ```ARCH= -gencode arch=compute_61,code=[sm_61,compute_61] ``` depending on your [GPU version](https://developer.nvidia.com/cuda-gpus). For more information, one can follow the [blog](https://www.myzhar.com/blog/tutorials/tutorial-nvidia-gpu-cuda-compute-capability/).
+
+    For CPU:
+    ```
+    GPU=0
+    CUDNN=0
+    CUDNN_HALF=0
+    OPENCV=1
+    AVX=1
+    OPENMP=1
+    LIBSO=0
+    ZED_CAMERA=0
+    ZED_CAMERA_v2_8=0
+    USE_CPP=0
+    DEBUG=0
+    ```
+16. asd
+17. 
+
+1
+
+
+
+
