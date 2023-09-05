@@ -78,7 +78,7 @@ The following instructions are for creating your custom weight:
 9. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file. If you want to change the hyperparameters, please follow AlexeyAB [how to train 
  tiny yolo to detect your custom objects](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/edit/main/Model_training/#how-to-train-tiny-yolo-to-detect-your-custom-objects). (_With current configuration we found the best result._)
 10. Inside the "***Model_training***" directory, make a folder name "***weights***".
-11. Download the [weight]([https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing](https://drive.google.com/file/d/1FGwnI2d9w10vri4e7R-V79b-dC4XJBhx/view?usp=sharing) and place it under the "***weight***" folder.
+11. Download the pre trained model [weight]([https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing](https://drive.google.com/file/d/1FGwnI2d9w10vri4e7R-V79b-dC4XJBhx/view?usp=sharing) and place it under the "***weight***" folder.
 12. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
 
     For running on GPU:
@@ -116,9 +116,9 @@ The following instructions are for creating your custom weight:
 14. In the terminal execute  ``` ./darknet detector train <path_to_your_.data_file> <path_to_your_.cfg_file> <path_to_your_pre-trained_weight> map```
 
     For me, the execution command was:
-   ```./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.weights map```
+   ```./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.conv.29 map```
 15. Each time you change anything in the ***step[5-12]***, execute ```make clean``` in the terminal and re-execute the command mentioned in ***step[13,14]***.
-16. a 
+16. 
 
 
 
