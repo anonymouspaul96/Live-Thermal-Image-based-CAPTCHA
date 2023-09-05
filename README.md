@@ -118,7 +118,7 @@ The following instructions are for creating your custom weight:
     For me, the execution command was:
    ```./darknet detector train training/model_person_class/model_person.data training/model_person_class/yolov4-tiny-model-person.cfg weights/yolov4-tiny.conv.29 map```
 15. Each time you change anything in the ***step[5-12]***, execute ```make clean``` in the terminal and re-execute the command mentioned in ***step[13,14]***.
-16. After training, all the weights will be available in the backup ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder.
+16. After training, all the weights will be available in the ***backup*** ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder.
 17. We trained the model for 40,000 epochs, resulting in an average loss of 0.0509. This score falls within the range of 0.5 to 0.03, as indicated in the [YOLO documentation](https://github.com/AlexeyAB/darknet#how-to-train-to-detect-your-custom-objects) for an exemplary detector model. 
 ![chart](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/a7620f85-82cc-4d8b-b9c3-6e5fd5c402b6)
 
