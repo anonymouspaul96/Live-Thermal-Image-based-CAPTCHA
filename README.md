@@ -78,7 +78,7 @@ The following instructions are for creating your custom weight:
 9. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file. If you want to change the hyperparameters, please follow AlexeyAB [how to train 
  tiny yolo to detect your custom objects](https://github.com/AlexeyAB/darknet#how-to-train-to-detect-your-custom-objects). (_With the current configuration, we found the best result._)
 10. Inside the "***Model_training***" directory, make a folder name "***weights***".
-11. Download the pre trained model [weight](https://drive.google.com/file/d/1FGwnI2d9w10vri4e7R-V79b-dC4XJBhx/view?usp=drive_link)and place it under the "***weight***" folder.
+11. Download the pre trained model [weight](https://drive.google.com/file/d/1FGwnI2d9w10vri4e7R-V79b-dC4XJBhx/view?usp=drive_link) and place it under the "***weight***" folder.
 12. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
 
     For running on GPU:
