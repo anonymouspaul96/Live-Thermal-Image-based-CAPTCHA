@@ -41,8 +41,8 @@ The following instructions are for creating your custom weight:
 2. Clone the repository ```git clone https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA.git```.
 3. Go to the "***Model_training***" directory ```cd Model_training```.
 4. Create a folder name "***backup***" ```mkdir backup```.
-5. Download the [dataset](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing) folder and place it under the "***training***" directory. (_Make sure the folder name is "dataset". If downloaded with a different name, rename the folder name to "dataset" and copy it._)
-6. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***model_person.data***" file and make sure its pointing the wright path.
+5. Download the [dataset](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing) folder and place it under the "***training***" directory. (_Make sure the folder name is "dataset". If downloaded with a different name, rename the folder to "dataset" and copy it._)
+6. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder, open the "***model_person.data***" file and ensure it's pointing to the right path.
    for me:
    ```
    classes = 1
@@ -59,7 +59,7 @@ The following instructions are for creating your custom weight:
    names  = /[your path]/training/model_person_class/model_person.names
    backup = /[your path]/backup/
    ```
-8. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder also open "***train.txt***" and "***test.txt***" file and make sure it's pointing the wright path in the dataset folder.
+8. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder, also open the "***train.txt***" and "***test.txt***" files and make sure it's pointing to the right path in the dataset folder.
    for me:
    ```
    /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/6_x_90.jpg
@@ -74,7 +74,7 @@ The following instructions are for creating your custom weight:
    /[your path]/training/dataset/6_y_80.jpg
    /[your path]/training/dataset/7_x_100.jpg
    ```
-10. The entries in the "***train.txt***" and "***test.txt***" file also depends on the percentage of data you want for training and testing purpose. For instance, 80% for training and, 20% for testing.
-11. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file.(_In the current configuration configuration we found the best result._)
+10. The entries in the "***train.txt***" and "***test.txt***" file also depends on the percentage of data you want for training and testing purpose. (***You can change the ratio***)
+11. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file if you want to change the hyperparameters,.(_With current configuration configuration we found the best result._)
 12. Inside the "***Model_training***" directory, make a folder name "***weights***".
 13. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
