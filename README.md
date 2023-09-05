@@ -80,7 +80,7 @@ The following instructions are for creating your custom weight:
 12. Inside the "***Model_training***" directory, make a folder name "***weights***".
 13. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
 14. Open the ```Makefile``` under ```Live-Thermal-Image-based-CAPTCHA/Model_training``` folder. Change the file depending on your GPU accessibility.
-   For GPU:
+   For running on GPU:
     ```
     GPU=1
     CUDNN=1
@@ -97,7 +97,7 @@ The following instructions are for creating your custom weight:
     ```
     Also, change ```ARCH= -gencode arch=compute_61,code=[sm_61,compute_61] ``` depending on your [GPU version](https://developer.nvidia.com/cuda-gpus). For more information, one can follow the [blog](https://www.myzhar.com/blog/tutorials/tutorial-nvidia-gpu-cuda-compute-capability/).
 
-    For CPU:
+    For running on CPU:
     ```
     GPU=0
     CUDNN=0
