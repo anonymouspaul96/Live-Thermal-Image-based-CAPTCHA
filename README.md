@@ -76,6 +76,6 @@ The following instructions are for creating your custom weight:
    ```
 10. The entries in the "***train.txt***" and "***test.txt***" file also depends on the percentage of data you want for training and testing purpose. (***You can change the ratio***)
 11. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder open "***yolov4-tiny-model-person.cfg***" file. If you want to change the hyperparameters, please follow AlexeyAB [how to train 
- tiny yolo to detect your custom objects](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/edit/main/Model_training/README.md#how-to-train-tiny-yolo-to-detect-your-custom-objects). (_With current configuration we found the best result._)
+ tiny yolo to detect your custom objects](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/edit/main/Model_training/#how-to-train-tiny-yolo-to-detect-your-custom-objects). (_With current configuration we found the best result._)
 12. Inside the "***Model_training***" directory, make a folder name "***weights***".
 13. Download the [weight](https://drive.google.com/file/d/1iUYvf24txvvt8JZU3pXTLl3prZeF6YON/view?usp=sharing) and place it under the "***weight***" folder.
