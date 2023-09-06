@@ -137,8 +137,8 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 | :---         | :---         | :---         | :---         |     :---:      |     :---:      |     :---:      |          ---: |          ---: |     :---:      |
 | [10,000](https://drive.google.com/file/d/1GrX1eikgRFOtfI0umJklOP82xV65yfq2/view?usp=sharing) | 1,286 | 745 | 0.25 | **722** | 257 | 23 | 50 | 59.14 | 80.8904 |
 | [20,000](https://drive.google.com/file/d/1IfdSGWviVqmk1NNW_AhAPZ3bEpMQVYJd/view?usp=sharing) | 2,343 | 745 | 0.25 | 716 | 319 | **29** | 50 | 53.77 | 78.5271 |
-| [**30,000**](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) | 2,756 | 745 | 0.25 | 715 | 212 | 30 | 50 | **61.51** | **83.5529** |
-| [40,000](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing) | 3,695 | 745 | 0.25 | 695 | 529 | 50 | 50 | **44.88** | 74.8232 |
+| [**30,000**](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) | 2,756 | 745 | 0.25 | 715 | **212** | 30 | 50 | **61.51** | **83.5529** |
+| [40,000](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing) | 3,695 | 745 | 0.25 | 695 | 529 | 50 | 50 | 44.88 | 74.8232 |
 
 ## Downloads
 ### Datasets
