@@ -125,9 +125,13 @@ The following instructions are for creating your custom weight:
 >![chart](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/a7620f85-82cc-4d8b-b9c3-6e5fd5c402b6)
 
 ## Generated weights comparison after every 10,000 iterations
-You can check mAP for all the weights saved every 1000 iterations, for e.g.:- yolov4-custom_4000.weights, yolov4-custom_5000.weights, yolov4-custom_6000.weights, and so on. This lets you find out which weights file gives you the best result. The higher the mAP, the better it is. Run the following command to check the mAP for a particular saved weights file where xxxx is the iteration number for it.(eg:- 4000,5000,6000,…)
+You can check mAP for all the weights saved every 1000 iterations, for example:- yolov4-custom_4000.weights, yolov4-custom_5000.weights, yolov4-custom_6000.weights, and so on. This lets you find out which weights file gives you the best result. The higher the mAP, the better it is. Run the following command to check the mAP for a particular saved weights file where xxxx is the iteration number for it.(eg:- 4000,5000,6000,…)
 ```
-!./darknet detector map data/obj.data cfg/yolov4-custom.cfg /mydrive/yolov4/training/yolov4-custom_xxxx.weights -points 0
+!./darknet detector map <path_to_your_.data_file> <path_to_your_.cfg_file> <path_to_your_yolov4-custom_xxxx.weights> -points 0
+```
+For me, the command was:
+```
+!./darknet detector map ./training/model_person_class/model_person.data ./training/model_person_class/yolov4-tiny-model-person.cfg ./backup/yolov4-tiny-model-person_30000.weights -points 0
 ```
 
 
