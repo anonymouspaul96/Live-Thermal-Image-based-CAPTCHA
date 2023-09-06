@@ -125,7 +125,7 @@ The following instructions are for creating your custom weight:
 >![chart](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/assets/142852373/a7620f85-82cc-4d8b-b9c3-6e5fd5c402b6)
 
 ## Generated weights comparison after every 10,000 iterations
-You can check mAP for all the weights saved every 1000 iterations, for example:- yolov4-custom_4000.weights, yolov4-custom_5000.weights, yolov4-custom_6000.weights, and so on. This lets you find out which weights file gives you the best result. The higher the mAP, the better it is. Run the following command to check the mAP for a particular saved weights file where xxxx is the iteration number for it.(eg:- 4000,5000,6000,…)
+You can check mAP for all the weights saved every 1000 iterations, for example:- _yolov4-custom_10000.weights_, _yolov4-custom_20000.weights_, _yolov4-custom_30000.weights_, and so on. This lets you find out which weights file gives you the best result. The higher the **mAP**, the better it is. Run the following command to check the **mAP** for a particular saved weights file where **xxxx** is the iteration number for it. (e.g.:- 4000, 5000, 6000,…)
 ```
 !./darknet detector map <path_to_your_.data_file> <path_to_your_.cfg_file> <path_to_your_yolov4-custom_xxxx.weights> -points 0
 ```
@@ -137,7 +137,7 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 | :---         | :---         | :---         | :---         |     :---:      |     :---:      |     :---:      |          ---: |          ---: |     :---:      |
 | [10,000](https://drive.google.com/file/d/1GrX1eikgRFOtfI0umJklOP82xV65yfq2/view?usp=sharing) | 1,286 | 745 | 0.25 | 722 | 257 | 23 | 50 | 59.14 | 80.8904 |
 | [20,000](https://drive.google.com/file/d/1IfdSGWviVqmk1NNW_AhAPZ3bEpMQVYJd/view?usp=sharing) | 2,343 | 745 | 0.25 | 716 | 319 | 29 | 50 | 53.77 | 78.5271 |
-| [30,000](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) | 2,756 | 745 | 0.25 | 715 | 212 | 30 | 50 | 61.51 | 83.5529 |
+| [30,000](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) | 2,756 | 745 | 0.25 | 715 | 212 | 30 | 50 | 61.51 | **83.5529** |
 | [40,000](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing) | 3,695 | 745 | 0.25 | 695 | 529 | 50 | 50 | 44.88 | 74.8232 |
 
 ## Downloads
