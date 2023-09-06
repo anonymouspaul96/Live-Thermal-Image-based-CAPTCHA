@@ -140,4 +140,16 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 | [30,000](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing) | 2,756 | 745 | 0.25 | 715 | 212 | 30 | 50 | 61.51 | 83.5529 |
 | [40,000](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing) | 3,695 | 745 | 0.25 | 695 | 529 | 50 | 50 | 44.88 | 74.8232 |
 
+## Downloads
+### Datasets
+- [Original thermal image](https://drive.google.com/drive/folders/1RhkLUHs1So0swPK-_da2skrshN5og0Xz?usp=sharing)
+- [Original & augmented thermal image](https://drive.google.com/drive/folders/1kGLN7eINFEycZbP6KbQvJI4wv4C3aEfq?usp=sharing)
+- [Thermal images taken from their homes under typical living circumstances](https://drive.google.com/drive/folders/1XcNbx0LEm5WauFBxAKSlUsBKDElBAC7-?usp=sharing)
+### Weights
+- [yolov4-tiny-model-person_10000.weights](https://drive.google.com/file/d/1GrX1eikgRFOtfI0umJklOP82xV65yfq2/view?usp=sharing)
+- [yolov4-tiny-model-person_20000.weights](https://drive.google.com/file/d/1IfdSGWviVqmk1NNW_AhAPZ3bEpMQVYJd/view?usp=sharing)
+- [yolov4-tiny-model-person_30000.weights](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing)
+- [yolov4-tiny-model-person_40000.weights](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing)
+
+
 
