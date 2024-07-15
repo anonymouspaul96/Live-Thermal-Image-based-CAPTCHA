@@ -1,5 +1,5 @@
 # Live Thermal Image-based CAPTCHA
-CAPTCHAs serve as a protective measure to differentiate between humans and bots, preventing malicious bot programs from exploiting websites on the Internet. The majority of existing CAPTCHA solutions suffer from issues like subpar user experiences and disengagement. Our aim is to enhance the usability and accessibility of CAPTCHA-protected websites for all users. This paper presents a novel CAPTCHA system design based on real-time live thermal images. Our design streamlines user interaction to a single click for granting access to the thermal web camera, allowing the CAPTCHA system to automatically discern humans from bots by detecting the presence of humans. Specifically, we utilized the YOLOv4-tiny (You Only Look Once) algorithm to detect humans in live thermal images, achieving a 96.70% accuracy rate in our evaluation. Furthermore, when operating on a low-powered server, our system attained an average detection time of 73.60 milliseconds per thermal image. Additionally, our system does not depend on users to complete typical AI tasks commonly employed within traditional CAPTCHA systems, such as tasks involving image selection and speech recognition. As a result, it provides theoretical immunity against potential AI-driven attacks. Our comprehensive analysis and usability assessment underscores the potential of the proposed thermal CAPTCHA to significantly enhance the effectiveness of traditional CAPTCHA systems while maintaining comparable or even superior levels of usability.
+CAPTCHAs serve as a protective measure to differentiate between humans and bots, preventing malicious bot programs from exploiting websites on the Internet. The majority of existing CAPTCHA solutions suffer from issues like subpar user experiences and disengagement. For example, Google's widely used image-based CAPTCHA service, known as reCAPTCHA v2, has issues of accessibility, usability, and security concerns. Our aim is to enhance the usability and accessibility of CAPTCHA-protected websites for all users without compromising security. In this paper, we present the design of a novel CAPTCHA system based on real-time thermal images. Our design streamlines user interaction to a single click, capturing a thermal image of the user to automatically allow the CAPTCHA system to distinguish humans from bots by detecting human presence. During evaluation, our CAPTCHA system demonstrated an accuracy rate of 96.70\%. Furthermore, when operating on a low-powered server, our system achieved an average detection time of 73.60 milliseconds (ms) per thermal image. Additionally, our system does not depend on users to complete typical AI tasks commonly employed within traditional CAPTCHA systems, such as tasks involving image selection and speech recognition. As a result, it provides theoretical immunity against potential AI-driven attacks. Our comprehensive analysis and usability assessment underscores the potential of the proposed thermal CAPTCHA to significantly enhance the effectiveness of traditional CAPTCHA systems while maintaining comparable or even superior levels of usability and security. 
 
 
 ## How can I run "Live-Thermal-Image-based-CAPTCHA" in any PC?
@@ -32,7 +32,7 @@ For tasks specific to web browsers, such as submitting a thermal image and recei
 
 >[!NOTE]
 >If you face any problems to run the application, please email ```"**@gmail.com***"```
->Besides, anyone can change the database using the ["thermalCaptchaDatabase.py"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main/Application) file.
+>Besides, anyone can change the database using the ["thermalCaptchaDatabase.py"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main/Application) file, such as, adding different websites site-key or shared-key. Schema of our database is mentioned in ["Database"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main#DatabaseSchema) section.
 
 ## How can I generate my own weight with a thermal dataset?
 
@@ -152,7 +152,7 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 - [yolov4-tiny-model-person_30000.weights](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing)
 - [yolov4-tiny-model-person_40000.weights](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing)
 
-## Database Schema
+## [**Database Schema**](#DatabaseSchema):
 ### ServerVSWebsite Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **SiteKey**: TEXT UNIQUE NOT NULL
