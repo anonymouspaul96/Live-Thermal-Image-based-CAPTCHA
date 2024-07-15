@@ -32,6 +32,7 @@ For tasks specific to web browsers, such as submitting a thermal image and recei
 
 >[!NOTE]
 >If you face any problems to run the application, please email ```"**@gmail.com***"```
+>Anyone can change the database using the ["thermalCaptchaDatabase.py"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main/Application) file.
 
 ## How can I generate my own weight with a thermal dataset?
 
