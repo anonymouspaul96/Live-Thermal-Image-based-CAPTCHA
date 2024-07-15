@@ -151,36 +151,36 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 - [yolov4-tiny-model-person_20000.weights](https://drive.google.com/file/d/1IfdSGWviVqmk1NNW_AhAPZ3bEpMQVYJd/view?usp=sharing)
 - [yolov4-tiny-model-person_30000.weights](https://drive.google.com/file/d/1DnBbmnqKM9lKUh9vZOPk4oxt4W3NzZaC/view?usp=sharing)
 - [yolov4-tiny-model-person_40000.weights](https://drive.google.com/file/d/1LBMGW-XTGu3RfBqBYozOCuDKV-CO5Ri7/view?usp=sharing)
-# Database Schema
 
-## ServerVSWebsite Table
+## Database Schema
+### ServerVSWebsite Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **SiteKey**: TEXT UNIQUE NOT NULL
 - **WebsiteName**: TEXT UNIQUE NOT NULL
 - **SharedKey**: TEXT NOT NULL
 
-## Users Table
+### Users Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **SiteKey**: TEXT NOT NULL
 - **WebsiteName**: TEXT NOT NULL
 - **UserIPAddress**: TEXT NOT NULL
 - **FOREIGN KEY (SiteKey)**: REFERENCES ServerVSWebsite(SiteKey)
 
-## Detections Table
+### Detections Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **UserID**: INTEGER NOT NULL
 - **Result**: INTEGER NOT NULL
 - **Timestamp**: DATETIME DEFAULT CURRENT_TIMESTAMP
 - **FOREIGN KEY (UserID)**: REFERENCES Users(UniqueID)
 
-## UserNonce Table
+### UserNonce Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **UserID**: INTEGER NOT NULL
 - **Nonce**: TEXT NOT NULL UNIQUE
 - **Timestamp**: DATETIME DEFAULT CURRENT_TIMESTAMP
 - **FOREIGN KEY (UserID)**: REFERENCES Users(UniqueID)
 
-## TokenNonce Table
+### TokenNonce Table
 - **UniqueID**: INTEGER PRIMARY KEY AUTOINCREMENT
 - **Token**: TEXT NOT NULL
 - **Nonce**: TEXT NOT NULL UNIQUE
