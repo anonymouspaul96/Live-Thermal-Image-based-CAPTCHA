@@ -31,7 +31,7 @@ For tasks specific to web browsers, such as submitting a thermal image and recei
 >Anyone can run our Live-Thermal-Image-based-CAPTCHA in any OS. One only has to copy the ["***Application***"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main/Application) directory and follow the running instructions mentioned ["How can I run "Live-Thermal-Image-based-CAPTCHA" in any PC"](https://github.com/anonymouspaul96/Live-Thermal-Image-based-CAPTCHA/tree/main#ApplicationRunningInstruction). If there is no error and the application still can't detect the thermal webcam, then try changing the "***camlist[\*]***" value in the "***app.py***" file. ***Usually, the value will be between (0-10)***.
 
 >[!NOTE]
->If you face any problems to run the application, please email "***ap.anonymouspaul@gmail.com***"
+>If you face any problems to run the application, please email ```"***ap.anonymouspaul@gmail.com***"```
 
 ## How can I generate my own weight with a thermal dataset?
 
