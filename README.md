@@ -144,7 +144,7 @@ Weights | Detections count |  Unique truth count | Conf. threshold | TP | FP | F
 
 ## Google Form for Usability Study
 
-[Please fill out the Google Form for the usability study. Thank you!](https://docs.google.com/forms/d/e/1FAIpQLSdXhh1PwYUqI0w9QJ345XMYrjwgamNrBRx8WpyZLpWUhVk9eg/viewform)
+Please fill out this [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdXhh1PwYUqI0w9QJ345XMYrjwgamNrBRx8WpyZLpWUhVk9eg/viewform) for the usability study. Thank you!
 
 ## Downloads
 ### Datasets
