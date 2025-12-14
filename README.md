@@ -48,10 +48,10 @@ The following instructions are for creating your custom weight:
    for me:
    ```
    classes = 1
-   train  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/train.txt
-   valid  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/test.txt
-   names  = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/training/model_person_class/model_person.names
-   backup = /media/shovon/7CA47F71A47F2D302/CODE/darknet_testing/backup/
+   train  = /[your path]/training/model_person_class/train.txt
+   valid  = /[your path]/training/model_person_class/test.txt
+   names  = /[your path]/training/model_person_class/model_person.names
+   backup = /[your path]/backup/
    ```
    example:
    ```
@@ -64,10 +64,10 @@ The following instructions are for creating your custom weight:
 7. Inside the ```Live-Thermal-Image-based-CAPTCHA/Model_training/training/model_person_class``` folder, also open the "***train.txt***" and "***test.txt***" files and make sure it's pointing to the right path in the dataset folder.
    for me:
    ```
-   /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/6_x_90.jpg
-   /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/6_y_100.jpg
-   /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/6_y_80.jpg
-   /media/shovon/7CA47F71A47F2D301/CODE/darknet_testing/training/dataset/7_x_100.jpg
+   /[your path]training/dataset/6_x_90.jpg
+   /[your path]/training/dataset/6_y_100.jpg
+   /[your path]/training/dataset/6_y_80.jpg
+   /[your path]/training/dataset/7_x_100.jpg
    ```
    example:
    ```
