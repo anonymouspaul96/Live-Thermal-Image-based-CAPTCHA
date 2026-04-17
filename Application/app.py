@@ -47,6 +47,7 @@ app = Flask(__name__)
 # Constants
 # Ensure it's in bytes #Server own secret key
 SERVER_SECRET_KEY = '9a61f13c92a04010b0f87a15734673c8'.encode()
+CHALLENGE_TTL_SECONDS = 120
 
 # Camera selection preference
 # IMPORTANT: On macOS, pygame camera names don't match actual cameras!
@@ -243,7 +244,8 @@ def generate_token(user_id, site_key, session_id, device_fingerprint):
     Generates a traceable JWT token with sessionID and device fingerprint.
     This makes the token tamper-proof and prevents token reuse by CAPTCHA farms.
     """
-    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=2)
+    expiration_time = datetime.datetime.now(
+        datetime.timezone.utc) + datetime.timedelta(minutes=2)
     nonce = os.urandom(16).hex()
     token_payload = {
         'exp': expiration_time,
@@ -377,6 +379,61 @@ def get_shared_key_by_sitekey(site_key, cursor):
         print("Site key not found.")
         return None
 
+
+def canonicalize_challenge(challenge):
+    return json.dumps(challenge, sort_keys=True, separators=(",", ":")).encode()
+
+
+def build_signed_blob(challenge, binary_data, device_fingerprint):
+    return canonicalize_challenge(challenge) + binary_data + device_fingerprint.encode()
+
+
+def derive_public_key_bound_fingerprint(user_ip, public_key_pem, user_agent=None):
+    fingerprint_data = {
+        'ip': user_ip,
+        'user_agent': user_agent or 'Unknown',
+        'device_public_key_sha256': hashlib.sha256((public_key_pem or '').encode()).hexdigest()
+    }
+    fingerprint_string = json.dumps(fingerprint_data, sort_keys=True)
+    return hashlib.sha256(fingerprint_string.encode()).hexdigest()
+
+
+def validate_challenge_freshness(challenge):
+    required_challenge_keys = [
+        "challenge_id", "nonce", "issued_at", "expires_in_seconds"]
+    for challenge_key in required_challenge_keys:
+        if challenge_key not in challenge:
+            raise KeyError(f"Missing required challenge key: {challenge_key}")
+
+    issued_dt_utc = datetime.datetime.strptime(
+        challenge["issued_at"], "%Y-%m-%dT%H:%M:%SZ"
+    ).replace(tzinfo=datetime.timezone.utc)
+    now_dt_utc = datetime.datetime.now(datetime.timezone.utc)
+    age_seconds = (now_dt_utc - issued_dt_utc).total_seconds()
+    now_utc_str = now_dt_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+    ttl_seconds = int(challenge["expires_in_seconds"])
+
+    print(
+        "Challenge Debug -> "
+        f"challenge_id={challenge['challenge_id']} | "
+        f"issued_at={challenge['issued_at']} | "
+        f"server_now={now_utc_str} | "
+        f"age_seconds={age_seconds} | "
+        f"ttl_seconds={ttl_seconds}"
+    )
+
+    if age_seconds < 0:
+        raise ValueError(
+            f"Message rejected: challenge issued in the future (age={age_seconds}).")
+
+    if age_seconds > ttl_seconds:
+        raise ValueError(
+            "Message rejected: challenge expired "
+            f"({age_seconds} seconds old, ttl={ttl_seconds})."
+        )
+
+    return challenge["nonce"], age_seconds
+
 def add_session_tracking(user_id, session_id, device_fingerprint, cursor, conn):
     """
     Store sessionID and device fingerprint for later verification.
@@ -406,7 +463,8 @@ def add_session_tracking(user_id, session_id, device_fingerprint, cursor, conn):
 
 
 def delete_old_records(cursor, conn):
-    three_minutes_ago = datetime.datetime.utcnow() - datetime.timedelta(minutes=3)
+    three_minutes_ago = datetime.datetime.now(
+        datetime.timezone.utc) - datetime.timedelta(minutes=3)
     cursor.execute('DELETE FROM Detections WHERE Timestamp < ?',
                    (three_minutes_ago,))
     conn.commit()
@@ -417,164 +475,134 @@ def process_payload(payload_json, cursor, conn):
     try:
         # Parse payload and check for required keys
         payload = json.loads(payload_json)
-        required_keys = ["binary_with_metadata", "signature",
+        required_keys = ["thermal_image", "challenge", "signature",
                          "public_key", "SiteKey", "WebsiteName", "user_IP", "device_fingerprint"]
         for key in required_keys:
             if key not in payload:
                 raise KeyError(f"Missing required key in payload: {key}")
 
-        binary_with_metadata_base64 = payload["binary_with_metadata"]
+        thermal_image_base64 = payload["thermal_image"]
+        challenge = payload["challenge"]
         signature_base64 = payload["signature"]
         public_key_base64 = payload["public_key"]
         site_key = payload["SiteKey"]
         website_name = payload["WebsiteName"]
         user_IP = payload["user_IP"]
-        received_device_fingerprint = payload["device_fingerprint"]  # Extract device fingerprint from payload
+        device_fingerprint = payload["device_fingerprint"]
 
-        # Decode Base64 to binary
-        received_binary_with_metadata = base64.b64decode(
-            binary_with_metadata_base64)
+        # Decode Base64 values
+        thermal_image_binary = base64.b64decode(thermal_image_base64)
         received_signature = base64.b64decode(signature_base64)
         public_key = serialization.load_pem_public_key(
             public_key_base64.encode())
 
-        # Extract the metadata (timestamp, nonce, and device fingerprint)
-        metadata_start = received_binary_with_metadata.rfind(b"Timestamp:")
-        received_metadata = received_binary_with_metadata[metadata_start:].decode(
+        # Enforce public-key-bound fingerprint integrity.
+        expected_device_fingerprint = derive_public_key_bound_fingerprint(
+            user_IP,
+            public_key_base64
         )
-        received_binary = received_binary_with_metadata[:metadata_start]
+        if device_fingerprint != expected_device_fingerprint:
+            print(
+                "Message rejected: device fingerprint does not match public-key-bound fingerprint.")
+            return None
 
-        # Extract timestamp, nonce, and device fingerprint from metadata
-        received_timestamp = received_metadata.split(
-            ", Nonce: ")[0].split("Timestamp: ")[1]
-        nonce_part = received_metadata.split(", Nonce: ")[1]
-        received_nonce = nonce_part.split(", DeviceFingerprint: ")[0]
-        metadata_device_fingerprint = nonce_part.split(", DeviceFingerprint: ")[1] if ", DeviceFingerprint: " in nonce_part else None
-        
-        # Verify device fingerprint matches between payload and metadata
-        if metadata_device_fingerprint and metadata_device_fingerprint != received_device_fingerprint:
-            print("Warning: Device fingerprint mismatch between payload and metadata")
-        
-        # Use the device fingerprint from payload (more reliable)
-        device_fingerprint = received_device_fingerprint
+        # Freshness + replay checks must run before model inference
+        challenge_nonce, challenge_age = validate_challenge_freshness(challenge)
+        if is_user_nonce_present(challenge_nonce, cursor):
+            print("Message rejected: nonce has been used before.")
+            return None
 
-        # First check if the received image is a thermal image or not
-        image = Image.open(io.BytesIO(received_binary))
+        # Verify signature over challenge || image || fingerprint
+        signed_blob = build_signed_blob(
+            challenge, thermal_image_binary, device_fingerprint)
+        signed_blob_hash = hashlib.sha256(signed_blob).digest()
+
+        try:
+            public_key.verify(
+                received_signature,
+                signed_blob_hash,
+                padding.PSS(
+                    mgf=padding.MGF1(hashes.SHA256()),
+                    salt_length=padding.PSS.MAX_LENGTH
+                ),
+                Prehashed(hashes.SHA256())
+            )
+            print(
+                f"Message verified and accepted. Received Nonce: {challenge_nonce} | ChallengeAge: {challenge_age} seconds")
+        except InvalidSignature:
+            print("Message rejected: invalid signature.")
+            return None
+
+        # Run model inference only after signature + freshness checks
+        image = Image.open(io.BytesIO(thermal_image_binary))
         result = is_thermal_image(image)
-        if result == "Thermal Image":
-            print(f"Image is: {result}")
-            # conn = sqlite3.connect('thermal_captcha.db')
-            # cursor = conn.cursor()
-
-            if is_user_nonce_present(received_nonce, cursor):
-                print("Message rejected: nonce has been used before.")
-            else:
-                # Check if the timestamp is within the acceptable range (e.g., 2 minutes)
-                current_time = time.strftime(
-                    "%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-                current_time_obj = time.strptime(
-                    current_time, "%Y-%m-%dT%H:%M:%SZ")
-                received_time_obj = time.strptime(
-                    received_timestamp, "%Y-%m-%dT%H:%M:%SZ")
-
-                time_difference = abs(time.mktime(
-                    current_time_obj) - time.mktime(received_time_obj))
-
-                if time_difference > 120:
-                    print(
-                        f"Message rejected: timestamp is too old. | TimeStamp: {time_difference} seconds")
-                else:
-                    # Hash the received binary data with metadata
-                    received_binary_hash = hashlib.sha256(
-                        received_binary_with_metadata).digest()
-
-                    # Verify the signature
-                    try:
-                        public_key.verify(
-                            received_signature,
-                            received_binary_hash,
-                            padding.PSS(
-                                mgf=padding.MGF1(hashes.SHA256()),
-                                salt_length=padding.PSS.MAX_LENGTH
-                            ),
-                            Prehashed(hashes.SHA256())
-                        )
-                        print(
-                            f"Message verified and accepted. Received Nonce: {received_nonce} | TimeStamp: {time_difference} seconds")
-                        # print(f"Received Binary Data: {received_binary}")
-
-                        image = Image.open(io.BytesIO(received_binary))
-                        # display(image)
-                        # Get the application directory for saving the encoded image
-                        app_dir = os.path.dirname(os.path.abspath(__file__))
-                        encoded_image_path = os.path.join(app_dir, "encoded_image_only_timestamp_nonce.jpg")
-                        image.save(encoded_image_path)
-                        img = cv2.imread(encoded_image_path, -1)
-                        # receiving img(image with bounaady box), foundLabel(detected lable from image), conf(confidence on detection)
-                        # sending the image to the model for detction. No need for capturing the detection image. I wanted to show the detection result in the browser.
-                        img, foundLabel, conf = runModel(img)
-
-                        user_id = add_user(
-                            site_key, website_name, user_IP, cursor, conn)
-                        if user_id is not None:
-                            add_detection(user_id, conf*100, cursor, conn)
-                            add_user_nonce(
-                                user_id, received_nonce, cursor, conn)
-                            
-                            # Generate unique sessionID for this challenge
-                            session_id = str(uuid.uuid4())
-                            print(f"Generated SessionID: {session_id}")
-                            
-                            # Store sessionID and device fingerprint for traceable token verification
-                            add_session_tracking(user_id, session_id, device_fingerprint, cursor, conn)
-
-                        show_all_detections(cursor)
-                        # delete_old_records(cursor, conn) #Un-comment this line to delete all older ditection more then 3 minutes
-                        SHARED_KEY = get_shared_key_by_sitekey(
-                            site_key, cursor)
-                        # show_all_user_nonces(cursor)
-
-                        # Generate traceable token with sessionID and device fingerprint
-                        token = generate_token(user_id, site_key, session_id, device_fingerprint)
-                        encrypted_token = encrypt_token(token, SHARED_KEY)
-                        # print(f"Generated Encrypted Token: {encrypted_token}")
-                        encrypted_token_base64 = base64.b64encode(
-                            encrypted_token).decode()
-
-                        payload = {
-                            "user_IP": user_IP,
-                            "SiteKey": site_key,
-                            "WebsiteName": website_name,
-                            "token": encrypted_token_base64
-                        }
-
-                        payload_json_from_captchaServer_to_user = json.dumps(
-                            payload)
-                        print("2- Payload JSON:",
-                              payload_json_from_captchaServer_to_user)
-                        return img, foundLabel, conf*100, payload_json_from_captchaServer_to_user
-
-                    except InvalidSignature:
-                        print("Message rejected: invalid signature.")
-        else:
+        if result != "Thermal Image":
             print(f"Rejected!!! Image is: {result}")
+            return None
+
+        print(f"Image is: {result}")
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        encoded_image_path = os.path.join(
+            app_dir, "encoded_image_only_timestamp_nonce.jpg")
+        image.save(encoded_image_path)
+        img = cv2.imread(encoded_image_path, -1)
+        # receiving img(image with bounaady box), foundLabel(detected label from image), conf(confidence on detection)
+        img, foundLabel, conf = runModel(img)
+
+        user_id = add_user(site_key, website_name, user_IP, cursor, conn)
+        if user_id is None:
+            return None
+
+        add_detection(user_id, conf * 100, cursor, conn)
+        add_user_nonce(user_id, challenge_nonce, cursor, conn)
+
+        # Generate unique sessionID for this challenge
+        session_id = str(uuid.uuid4())
+        print(f"Generated SessionID: {session_id}")
+
+        # Store sessionID and device fingerprint for traceable token verification
+        add_session_tracking(user_id, session_id,
+                             device_fingerprint, cursor, conn)
+
+        show_all_detections(cursor)
+        # delete_old_records(cursor, conn) #Un-comment this line to delete all older detection more than 3 minutes
+        SHARED_KEY = get_shared_key_by_sitekey(site_key, cursor)
+        if SHARED_KEY is None:
+            return None
+
+        # Generate traceable token with sessionID and device fingerprint
+        token = generate_token(user_id, site_key, session_id, device_fingerprint)
+        encrypted_token = encrypt_token(token, SHARED_KEY)
+        encrypted_token_base64 = base64.b64encode(encrypted_token).decode()
+
+        payload = {
+            "user_IP": user_IP,
+            "SiteKey": site_key,
+            "WebsiteName": website_name,
+            "token": encrypted_token_base64
+        }
+
+        payload_json_from_captchaServer_to_user = json.dumps(payload)
+        print("2- Payload JSON:", payload_json_from_captchaServer_to_user)
+        return img, foundLabel, conf * 100, payload_json_from_captchaServer_to_user
     except KeyError as e:
         print(e)
+    except ValueError as e:
+        print(e)
+    except Exception as e:
+        print(f"Unexpected processing error: {e}")
 
 # ******************************************CAPTCHA SERVER function**********************************
 # ******************************************UserSide functions starts***********************
 # Function to generate device fingerprint
-def generate_device_fingerprint(user_ip, user_agent=None):
+def generate_device_fingerprint(user_ip, user_agent=None, device_public_key_pem=None):
     """
-    Generates a unique device fingerprint based on device characteristics.
-    In a real implementation, this would include more browser/system characteristics.
+    Generates a public-key-bound device fingerprint.
     """
     fingerprint_data = {
-        'platform': platform.platform(),
-        'system': platform.system(),
-        'processor': platform.processor(),
         'ip': user_ip,
-        'user_agent': user_agent or 'Unknown'
+        'user_agent': user_agent or 'Unknown',
+        'device_public_key_sha256': hashlib.sha256((device_public_key_pem or '').encode()).hexdigest()
     }
     # Create a hash of the fingerprint data
     fingerprint_string = json.dumps(fingerprint_data, sort_keys=True)
@@ -588,7 +616,7 @@ def image_to_binary(image_path):
     with open(image_path, "rb") as image_file:
         return image_file.read()
 
-# Function to add timestamp, nonce, and device fingerprint to the binary data
+# Legacy helper kept for backward compatibility with old payload format
 
 
 def add_metadata_to_binary(binary_data, timestamp, nonce, device_fingerprint):
@@ -691,23 +719,30 @@ def userSide(SiteKey, WebsiteName):
         # Use the same path where we saved the image
         image_binary = image_to_binary(thermal_image_path)
 
-        # Create timestamp and nonce
-        timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        # print(f"TimeStamp : {timestamp}")
-        nonce = os.urandom(16).hex()
-        # print(f"Nonce : {nonce}")
+        # Simulated server-issued challenge (nonce + freshness window)
+        server_challenge = {
+            "challenge_id": str(uuid.uuid4()),
+            "nonce": os.urandom(16).hex(),
+            "issued_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "expires_in_seconds": CHALLENGE_TTL_SECONDS
+        }
 
         # Generate device fingerprint
         user_IP = "127.0.0.1"
-        device_fingerprint = generate_device_fingerprint(user_IP)
+        public_key_pem = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        ).decode()
+        device_fingerprint = generate_device_fingerprint(
+            user_IP,
+            device_public_key_pem=public_key_pem
+        )
         # print(f"Device Fingerprint: {device_fingerprint}")
 
-        # Add timestamp, nonce, and device fingerprint to the binary data
-        binary_with_metadata = add_metadata_to_binary(
-            image_binary, timestamp, nonce, device_fingerprint)
-
-        # Hash the combined binary data with metadata
-        binary_hash = hashlib.sha256(binary_with_metadata).digest()
+        # Hash challenge || image || fingerprint
+        signed_blob = build_signed_blob(
+            server_challenge, image_binary, device_fingerprint)
+        binary_hash = hashlib.sha256(signed_blob).digest()
 
         # Sign the hash
         signature = private_key.sign(
@@ -720,25 +755,25 @@ def userSide(SiteKey, WebsiteName):
         )
 
         # Encode binary data and signature to Base64
-        binary_with_metadata_base64 = base64.b64encode(
-            binary_with_metadata).decode()
+        thermal_image_base64 = base64.b64encode(image_binary).decode()
         signature_base64 = base64.b64encode(signature).decode()
 
-        # # Print or send binary_with_metadata, signature, public_key (in a real scenario)
-        # print("Binary with Metadata:", binary_with_metadata_base64)
+        # # Print or send challenge, thermal_image, signature, public_key (in a real scenario)
+        # print("Challenge:", json.dumps(server_challenge))
         # print("Signature:", signature_base64)
         # print("Public Key:", public_key.public_bytes(encoding=serialization.Encoding.PEM,
         #       format=serialization.PublicFormat.SubjectPublicKeyInfo).decode())
 
-        # Prepare payload (including device fingerprint for server-side verification)
+        # Prepare payload (challenge + thermal frame + signature + fingerprint)
         payload = {
             "user_IP": user_IP,
             "SiteKey": SiteKey,
             "WebsiteName": WebsiteName,
-            "binary_with_metadata": binary_with_metadata_base64,
+            "challenge": server_challenge,
+            "thermal_image": thermal_image_base64,
             "signature": signature_base64,
-            "public_key": public_key.public_bytes(encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo).decode(),
-            "device_fingerprint": device_fingerprint  # Include device fingerprint in payload
+            "public_key": public_key_pem,
+            "device_fingerprint": device_fingerprint
         }
 
         # Convert payload to JSON format
