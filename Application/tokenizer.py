@@ -1,104 +1,60 @@
-import jwt
-import datetime
-from cryptography.fernet import Fernet
-import base64
+"""Standalone demo of the context-bound, single-use ThermoCAPTCHA token.
+
+Runs the token part of the protocol (``../thermocaptcha_protocol.py``) against a
+temporary copy of the database. It shows one legitimate redemption, then a
+replay, a relay from another device, and a forged website proof, all rejected.
+Secrets come from the environment (random demo values are generated if unset).
+
+    python tokenizer.py [path/to/thermal_image.bmp]
+"""
+import json
 import os
-import hmac
-import uuid
+import shutil
+import sys
+import tempfile
 
-# Load keys from environment variables
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(APP_DIR))
+import thermocaptcha_protocol as tp  # noqa: E402
+from thermalImageChecker import is_thermal_image  # noqa: E402
 
-# SERVER_SECRET_KEY = '9a61f13c92a04010b0f87a15734673c8'
-# SHARED_KEY = '548c8ffd856f4d74a518a63aa9a5d9d2'
+SITE_KEY, WEBSITE_NAME = "28024d2408754883a7eff1db9cea2b00", "microsoft.com"
+USER_IP, USER_UA = "127.0.0.1", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
 
-# Load keys from environment variables
-SERVER_SECRET_KEY = '9a61f13c92a04010b0f87a15734673c8'.encode()  # Ensure it's in bytes
-SHARED_KEY = '548c8ffd856f4d74a518a63aa9a5d9d2'.encode()  # Ensure it's in bytes
 
-# In-memory store for used nonces
-used_nonces = set()
+def main(image_path):
+    tp.ensure_demo_secrets(SITE_KEY)
+    with tempfile.TemporaryDirectory() as tmp:
+        db = os.path.join(tmp, "demo.db")
+        shutil.copy(os.path.join(APP_DIR, "thermal_captcha.db"), db)
+        server = tp.ThermoCaptchaServer(db, detector=is_thermal_image)
+        website = tp.Website(SITE_KEY, WEBSITE_NAME, tp.load_website_secret())
+        user = tp.ThermoCaptchaClient(tp.load_or_create_device_key(os.path.join(tmp, "device.pem")))
+        other = tp.ThermoCaptchaClient(tp.rsa.generate_private_key(public_exponent=65537, key_size=2048))
 
-def derive_combined_key(server_key, shared_key):
-    """
-    Derives a combined key using HMAC with SHA-256.
-    """
-    return base64.urlsafe_b64encode(hmac.new(server_key, shared_key, digestmod='sha256').digest())
+        with open(image_path, "rb") as f:
+            image = f.read()
+        capture = server.verify_capture(
+            user.build_capture_payload(server.issue_challenge(SITE_KEY), image), USER_IP, USER_UA)
+        print("token issued:", capture.ok, capture.reason)
+        if not capture.ok:
+            return
+        token = capture.data["response_json"]
 
-def generate_token(user_id):
-    """
-    Generates a JWT with an expiration time, a custom claim, and a nonce.
-    """
-    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=2)
-    nonce = os.urandom(16).hex()
-    token_payload = {
-        'exp': expiration_time,
-        'result_row_number': user_id,
-        'nonce': nonce
-    }
-    token = jwt.encode(token_payload, SERVER_SECRET_KEY, algorithm='HS256')
-    return token
+        user_payload = user.build_redemption_payload(token)
+        relay = server.redeem_token(website.build_server_request(
+            other.build_redemption_payload(token), "10.0.0.7", "curl/8.0"))
+        forged = server.redeem_token(tp.Website(SITE_KEY, WEBSITE_NAME, b"wrong-key").build_server_request(
+            user_payload, USER_IP, USER_UA))
+        legit = server.redeem_token(website.build_server_request(user_payload, USER_IP, USER_UA))
+        replay = server.redeem_token(website.build_server_request(user_payload, USER_IP, USER_UA))
+        for name, res in [("relay from other device", relay), ("forged website proof", forged),
+                          ("legitimate redemption", legit), ("replay of redeemed token", replay)]:
+            print(f"{name:<26} accepted={res.ok!s:<5} {res.reason}")
+        if legit.ok:
+            print("risk score:", json.loads(legit.data["response_json"])["Risk_score"])
+        server.close()
 
-def encrypt_token(token, shared_key):
-    """
-    Encrypts the JWT using a combined key derived from the server and shared keys.
-    """
-    combined_key = derive_combined_key(SERVER_SECRET_KEY, shared_key)
-    fernet_combined = Fernet(combined_key)
-    encrypted_token = fernet_combined.encrypt(token.encode())
-    return encrypted_token
 
-def decrypt_token(encrypted_token, shared_key):
-    """
-    Decrypts the token using a combined key derived from the server and shared keys.
-    """
-    combined_key = derive_combined_key(SERVER_SECRET_KEY, shared_key)
-    fernet_combined = Fernet(combined_key)
-    decrypted_token = fernet_combined.decrypt(encrypted_token).decode()
-    return decrypted_token
-
-def validate_token(encrypted_token, shared_key):
-    """
-    Validates the token by decrypting it, checking its validity, and ensuring the nonce has not been used before.
-    """
-    if not hmac.compare_digest(shared_key, SHARED_KEY):
-        return False, "Invalid shared key"
-
-    try:
-        token = decrypt_token(encrypted_token, shared_key)
-        decoded = jwt.decode(token, SERVER_SECRET_KEY, algorithms=['HS256'])
-
-        # Check if the nonce has been used before
-        nonce = decoded.get('nonce')
-        if nonce in used_nonces:
-            return False, "Replay attack detected: nonce already used"
-        used_nonces.add(nonce)
-
-        return True, decoded
-    except jwt.ExpiredSignatureError:
-        return False, "Token has expired"
-    except jwt.InvalidTokenError:
-        return False, "Invalid token"
-    except Exception as e:
-        return False, str(e)
-
-# Simulate generating a token and sending it to the website
-result_row_number = 123  # Example result row number
-token = generate_token(result_row_number)
-encrypted_token = encrypt_token(token, SHARED_KEY)#use database to get the shared key
-print(f"Generated Encrypted Token: {encrypted_token}")
-
-# Simulate the website sending the encrypted token back to the server with the shared key
-is_valid, response = validate_token(encrypted_token, SHARED_KEY)
-print(f"Token validation result: {is_valid}, Response: {response}")
-
-# # Simulate a replay attack by validating the same token again
-# is_valid, response = validate_token(encrypted_token, SHARED_KEY)
-# print(f"Token validation result after replay attack: {is_valid}, Response: {response}")
-
-# Simulate the token being expired
-import time
-# # Uncomment the line below to test token expiration
-# time.sleep(121)  # Wait for 2 minutes and 1 second
-
-# is_valid, response = validate_token(encrypted_token, SHARED_KEY)
-# print(f"Token validation result after expiration: {is_valid}, Response: {response}")
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(APP_DIR), "25.bmp"))

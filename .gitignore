@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+.conda/
+.ipynb_checkpoints/
+
+# Secrets
+.env
+*.env
+*.pem
+device_keys/
+
+# Data / model artifacts
+*.db
+*.npy
+*.pt
+*.ckpt
+*.weights
+*.so
+*.log
+wandb/
+Model_training/build/
+Model_training/obj/
+Model_training/darknet
+rq2_results/
+
+# OS
+.DS_Store
+
+# Runtime outputs of the Flask app
+Application/encoded_image_only_timestamp_nonce.jpg
