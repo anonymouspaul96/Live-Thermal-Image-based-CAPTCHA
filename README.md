@@ -194,3 +194,29 @@ Please fill out this [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdXh
 
 
 
+
+## Revised protocol (context-bound tokens)
+
+`thermocaptcha_protocol.py` is the single implementation of the client, CAPTCHA-server and website roles. It is used by `Final_code.ipynb` and by the RQ2 notebooks (`security_attack_test.ipynb`, `captcha_farm_attack_simulation.ipynb`).
+
+- The server issues the challenge `C` and session `sid`. The client signs `H(C || sid || H(I) || pk_d)` with a persistent (software) RSA key.
+- The server derives the fingerprint `F_d = H(IP_obs || UA_obs || H(pk_d))` and stores it with the session. The client never supplies a fingerprint.
+- The token is an HS256 JWT `{sessionID, device_fingerprint, nonce, exp, SiteKey}` wrapped with Fernet. It is single-use.
+- At redemption, the server recomputes `F_current` (after a proof of key possession) and requires `F_current = F_token = F_session`.
+- Website requests carry `HMAC_K_site(siteID || nonce || timestamp || H(body))`. Stale or replayed requests are rejected.
+
+Secrets come from environment variables: `THERMOCAPTCHA_SERVER_SECRET`, `THERMOCAPTCHA_SITE_SECRETS` (JSON `{SiteKey: K_site}`), `THERMOCAPTCHA_WEBSITE_SECRET`, and optionally `THERMOCAPTCHA_DEVICE_KEY_PASSPHRASE`. The notebooks generate random demo values when these are unset.
+
+### What uses the shared module
+
+| File | Role |
+|---|---|
+| `Final_code.ipynb` | Step-by-step walkthrough of the protocol (client, server, website) |
+| `security_attack_test.ipynb` | RQ2: 2,500 MITM attempts (5 classes x 500), plus website-channel tests |
+| `captcha_farm_attack_simulation.ipynb` | RQ2: 1,600 token-reuse attempts (N = 100, 500, 1000) |
+| `ablation.ipynb` | Measured ablation: 11 attacks x 100 attempts against the full protocol and 11 single-check-disabled servers |
+| `Application/app.py` | Flask demo with the thermal camera and YOLOv4-tiny risk score |
+| `Application/thermalCaptchaDatabase.py` | DB setup: `init`, `add-website <name>` (prints a fresh K_site once), `show [Table]` |
+| `Application/tokenizer.py` | Command-line demo of token issue, redemption, replay and relay |
+
+`ThermoCaptchaServer(disabled_checks=...)` exists only for `ablation.ipynb` and is empty everywhere else.
